@@ -60,7 +60,7 @@ func getKeycloakEnv(cr *v1alpha1.Keycloak, dbSecret *v1.Secret) []v1.EnvVar {
 		// Database settings
 		{
 			Name:  "DB_VENDOR",
-			Value: "POSTGRES",
+			Value: fmt.Sprintf("%v", GetExternalDatabaseVendor(dbSecret)),
 		},
 		{
 			Name:  "DB_SCHEMA",
@@ -68,7 +68,7 @@ func getKeycloakEnv(cr *v1alpha1.Keycloak, dbSecret *v1.Secret) []v1.EnvVar {
 		},
 		{
 			Name:  "DB_ADDR",
-			Value: PostgresqlServiceName + "." + cr.Namespace,
+			Value: fmt.Sprintf("%v", GetExternalDatabaseAddr(cr, dbSecret)),
 		},
 		{
 			Name:  "DB_PORT",

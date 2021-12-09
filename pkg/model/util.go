@@ -102,6 +102,23 @@ func IsIP(host []byte) bool {
 	return net.ParseIP(string(host)) != nil
 }
 
+func GetExternalDatabaseVendor(secret *v1.Secret) string {
+	if secret == nil {
+		return PostgresDefaultVendor
+	}
+
+	vendor := secret.Data[DatabaseSecretExternalVendorProperty]
+	return string(vendor)
+}
+
+func GetExternalDatabaseAddr(cr *v1alpha1.Keycloak, secret *v1.Secret) string {
+	if secret == nil {
+		return PostgresqlServiceName + "." + cr.Namespace
+	}
+
+	return GetExternalDatabaseHost(secret)
+}
+
 func GetExternalDatabaseHost(secret *v1.Secret) string {
 	host := secret.Data[DatabaseSecretExternalAddressProperty]
 	return string(host)
